@@ -1,44 +1,30 @@
 # DataScience_DeepLearning----TensorFlow_PyTorch----Flights_Sales_Demand_prediction
-# Flight Price Prediction using Deep Learning
+# Flight Price Prediction using Artificial Neural Networks (ANN)
 
-An end-to-end Deep Learning project that predicts flight ticket prices by processing multi-class features (airlines, cities, times, stops) and utilizing advanced Neural Network architectures. This project explores predictive modeling using **Artificial Neural Networks (ANNs)** implemented across **PyTorch** and **TensorFlow / Keras**.
+An end-to-end Deep Learning regression project that predicts airline ticket prices using an Artificial Neural Network implemented in Keras/TensorFlow. The pipeline processes raw structured flight logs, resolves multi-collinearity via Variance Inflation Factor (VIF), handles high-cardinality feature sets, and scales variables for neural network optimization.
 
 ## 🚀 Project Overview
-Predicting airline ticket prices is a complex regression problem due to highly dynamic pricing strategies, categorical variations (e.g., business vs. economy class), and temporal dependencies. 
-
-This repository implements deep learning regression pipelines to preprocess comprehensive flight datasets, manage high-cardinality categorical features, scale multi-class distributions, and train neural networks optimized via Root Mean Squared Error (RMSE).
+Dynamic ticket pricing models depend heavily on multiple factors such as route nodes, service class, and specific carrier assignments. This project treats price prediction as a pure regression challenge, building a robust dense neural network sequence to minimize continuous target error distributions over large-scale aviation datasets.
 
 ## 📂 Repository Structure
-* **`python---ANN.ipynb`**: Focuses on structured data engineering, feature pipeline design, and building baseline Sequential Artificial Neural Networks (ANN).
-* **`python---PyTorch, TensorFlow.ipynb`**: A comparative implementation expanding the architectures across both major deep learning frameworks (PyTorch and TensorFlow) to evaluate training behavior and optimization differences.
+* **`python---ANN.ipynb`**: The primary Jupyter Notebook containing data integration pipelines, multicollinearity analysis, feature engineering, and the full Keras sequential neural network implementation.
 
-## 📊 Dataset Features
-The models are trained on structured datasets (`business.csv` and `economy.csv`) consisting of over 300,000 flight records. Key variables include:
-* **Categorical**: `airline`, `ch_code`, `from` (Source City), `to` (Destination City), `stop` (Number of stops), `class` (Seat Class).
-* **Temporal / Continuous**: `date`, `dep_time` (Departure), `arr_time` (Arrival), `time_taken` (Duration).
-* **Target Variable**: `price` (Flight ticket price).
+## 📊 Dataset & Pipeline Overview
+The notebook handles structured data combinations from two source spaces (`business.csv` and `economy.csv`) mapping out over 300,000 distinct flight records.
 
-## 🛠️ Tech Stack & Libraries
-* **Core Language:** Python
-* **Deep Learning Frameworks:** PyTorch, TensorFlow / Keras
-* **Data Manipulation:** Pandas, NumPy
-* **Data Visualization:** Matplotlib, Seaborn
-* **Preprocessing:** Scikit-Learn (OneHotEncoder, StandardScaler, MinMaxScaler)
+### 1. Data Cleaning & Engineering
+* **Temporal Transformations**: Converts raw string entries into standard datetime properties (`date`, `dep_time`).
+* **Duration Formatting**: Uses regular expressions (`regex`) to parse compound string time representations (e.g., `02h 00m`) into quantitative numerical intervals (Total Minutes).
+* **Target Refinement**: Strips regional formatting and currency markers from price string properties before mapping them into integer types.
 
-## ⚙️ Model Architecture & Pipeline
-1. **Data Preprocessing:**
-   * Cleansing and structural parsing of string metrics (e.g., duration formatting).
-   * Feature encoding using tracking matrix transformations for high-cardinality values.
-   * Feature scaling using standard distribution transformations to ensure stable gradient updates.
-2. **Neural Network Framework:**
-   * Dense, fully connected layer stacks (Linear/Dense).
-   * Non-linear activation routing via **ReLU** to prevent vanishing gradients.
-   * Target output tracking via a single linear neuron optimized for continuous value regression.
-   * Model evaluation using performance metrics including **Root Mean Squared Error (RMSE)** and **R² (Coefficient of Determination)** score checks.
+### 2. Feature Filtering via Variance Inflation Factor (VIF)
+* To prevent feature inflation errors, categorical columns (`airline`, `ch_code`, `from`, `stop`, `to`, `class`) are parsed via tracking dummy variables (`pd.get_dummies`).
+* A structural **VIF Matrix** is generated to audit multicollinearity across all 66 transformed columns.
+* Highly collinear parameters are filtered to focus on standard low-variance indicators (such as `class_economy`, selective source/destination hubs, and structural flight identifiers).
 
-## 🚀 How to Run locally
-
-### 1. Clone the Repository
-```bash
-git clone [https://github.com/YOUR_USERNAME/YOUR_REPOSITORY_NAME.git](https://github.com/YOUR_USERNAME/YOUR_REPOSITORY_NAME.git)
-cd YOUR_REPOSITORY_NAME
+### 3. Deep Learning Architecture
+The model relies on a dense `Sequential` layout structured as follows:
+* **Input / Hidden Layer 1**: 50 Units, Rectified Linear Unit (`ReLU`) activation.
+* **Hidden Layer 2**: 30 Units, Rectified Linear Unit (`ReLU`) activation.
+* **Output Layer**: 1 Unit mapping the regression prediction bounds.
+* **Compilation**: Optimized using the **Adam** optimizer, tracked using Mean Absolute Error (
